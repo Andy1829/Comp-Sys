@@ -1,0 +1,61 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Mux4Way16.hdl
+
+/**
+ * 4-way 16-bit multiplexor:
+ * out = a if sel == 00
+ *       b if sel == 01
+ *       c if sel == 10
+ *       d if sel == 11
+ */
+
+CHIP Mux4Way16 {
+    IN a[16], b[16], c[16], d[16], sel[2];
+    OUT out[16];
+
+    PARTS:
+    
+
+    // Outputs 
+
+    // ARRAYS CAN BE PASSED AROUND !!
+    Mux16 (a = a[0..15], b = b[0..15], sel = sel[0], out = topOutput);
+    Mux16 (a = c[0..15], b = d[0..15], sel = sel[0], out = botOutput);
+
+    // Dependent on what the first selector digit is, the correct output is selected
+    Mux16 (a = topOutput, b = botOutput, sel = sel[1], out = out[0..15]);
+
+
+
+    /*
+    Not (in = sel[0], out = selInv0);
+    Not (in = sel[1], out = selInv1);
+    
+    And (a = selInv0, b = selInv1,  out = aSel, out = top);    // A is selected
+    And (a = selInv0, b = sel[1],   out = bSel, out = top);    // B is selected
+    And (a = sel[0], b = selInv1,   out = cSel, out = bot);    // C is selected
+    And (a = sel[0], b = sel[1],    out = dSel, out = bot);    // D is selected
+
+
+    Mux16 (a = a[0..15], b = b[1..16], sel = sel[0], out = out1);
+
+    Mux16 (a = c[0..15], b = d[1..16], sel = sel[0], out = out1);
+
+    And (a = top, b = top, out = out[16]);
+
+    
+    // Check for first digit
+    And (a = top, b = sel[0],    out = dSel, out = bot);    
+    
+    If top is active, dependent on sel[0], we can output 
+
+    Mux (a = top, b = );
+
+    
+
+    */
+
+
+}

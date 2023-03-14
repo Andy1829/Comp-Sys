@@ -1,0 +1,56 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/DMux4Way.hdl
+
+/**
+ * 4-way demultiplexor:
+ * {a, b, c, d} = {in, 0, 0, 0} if sel == 00
+ *                {0, in, 0, 0} if sel == 01
+ *                {0, 0, in, 0} if sel == 10
+ *                {0, 0, 0, in} if sel == 11
+ */
+
+CHIP DMux4Way {
+    IN in, sel[2];
+    OUT a, b, c, d;
+
+    PARTS:
+    Not (in = sel[0], out = selInv0);
+    Not (in = sel[1], out = selInv1);
+
+    And (a = selInv0, b = selInv1,  out = aTrue);    // A is selected
+    And (a = sel[0], b = selInv1,   out = bTrue);    // B is selected
+    And (a = selInv0, b = sel[1],   out = cTrue);    // C is selected
+    And (a = sel[0], b = sel[1],    out = dTrue);    // D is selected
+
+    And (a = aTrue, b = in, out = a);
+    And (a = bTrue, b = in, out = b);
+    And (a = cTrue, b = in, out = c);
+    And (a = dTrue, b = in, out = d);
+
+
+    /*
+
+    And (a = in, b = sel[0], out = )
+    
+    // Setting up selection dependencies
+
+    And (a = selInv0, b = selInv1,  out = aTrue);    // A is selected
+    And (a = selInv0, b = sel[1],   out = bTrue);    // B is selected
+    And (a = sel[0], b = selInv1,   out = cTrue);    // C is selected
+    And (a = sel[0], b = sel[1],    out = dTrue);    // D is selected
+
+    // Turns on when in is active
+    And (a = aTrue, b = in, out = a);
+    And (a = bTrue, b = in, out = bActive);
+    And (a = cTrue, b = in, out = cActive);
+    And (a = dTrue, b = in, out = d);
+
+    And (a = bActive, sel[])
+    
+    */
+    
+
+
+}

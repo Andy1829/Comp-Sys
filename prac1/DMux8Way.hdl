@@ -1,0 +1,51 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/DMux8Way.hdl
+
+/**
+ * 8-way demultiplexor:
+ * {a, b, c, d, e, f, g, h} = {in, 0, 0, 0, 0, 0, 0, 0} if sel == 000
+ *                            {0, in, 0, 0, 0, 0, 0, 0} if sel == 001
+ *                            etc.
+ *                            {0, 0, 0, 0, 0, 0, 0, in} if sel == 111
+ */
+
+CHIP DMux8Way {
+    IN in, sel[3];
+    OUT a, b, c, d, e, f, g, h;
+
+    PARTS:
+    Not (in = sel[0], out = selInv0);
+    Not (in = sel[1], out = selInv1);
+    Not (in = sel[2], out = selInv2);
+
+
+    And (a = selInv0, b = selInv1,  out = aeTrue);    // A is selected
+    And (a = sel[0], b = selInv1,   out = bfTrue);    // B is selected
+    And (a = selInv0, b = sel[1],   out = cgTrue);    // C is selected
+    And (a = sel[0], b = sel[1],    out = dhTrue);    // D is selected
+
+
+    And (a = aeTrue, b = selInv2,   out = aTrue);
+    And (a = aeTrue, b = sel[2],    out = eTrue);
+    And (a = bfTrue, b = selInv2,   out = bTrue); 
+    And (a = bfTrue, b = sel[2],    out = fTrue);
+
+    And (a = cgTrue, b = selInv2,   out = cTrue); 
+    And (a = cgTrue, b = sel[2],    out = gTrue);
+    And (a = dhTrue, b = selInv2,   out = dTrue); 
+    And (a = dhTrue, b = sel[2],    out = hTrue);
+
+
+    And (a = aTrue, b = in, out = a);
+    And (a = bTrue, b = in, out = b);
+    And (a = cTrue, b = in, out = c);
+    And (a = dTrue, b = in, out = d);
+
+    And (a = eTrue, b = in, out = e);
+    And (a = fTrue, b = in, out = f);
+    And (a = gTrue, b = in, out = g);
+    And (a = hTrue, b = in, out = h);
+    
+}
