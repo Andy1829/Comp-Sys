@@ -3,7 +3,7 @@
 // by Nisan and Schocken, MIT Press.
 // File name: projects/02/ALU.hdl
 
-/*
+/**
  * The ALU (Arithmetic Logic Unit).
  * Computes one of the following functions:
  * x+y, x-y, y-x, 0, 1, -1, x, y, -x, -y, !x, !y,
@@ -42,7 +42,6 @@ CHIP ALU {
         ng; // 1 if (out < 0),  0 otherwise
 
     PARTS:
-    
     // zx
     // zeroX saves a copy of a zero'ed output
     // If Mux16 is on, outputs 0'ed X, otherwise outputs X directly. 
@@ -100,7 +99,4 @@ CHIP ALU {
     // ng
     // If ngCheck is true (1), output ng status
     And (a = ngCheck, b = true, out = ng);
-
-
-    
 }
