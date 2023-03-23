@@ -1,0 +1,43 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/03/a/Bit.hdl
+
+/**
+ * 1-bit register:
+ * If load[t] == 1 then out[t+1] = in[t]
+ *                 else out does not change (out[t+1] = out[t])
+ */
+
+CHIP Bit {
+    IN in, load;
+    OUT out;
+
+    PARTS:
+    // USING MUX AS IF STATEMENT 
+    // Dependent on load, output either prevOut OR current INPUT (but delayed by 1 cycle)
+
+    Mux (a = prevOut, b = in, sel = load, out = currentOut);
+
+    // DFF ACCEPTS OUTPUT AS INPUT; takes both loadState possibilities 
+    // DELAYS THE OUTPUT BY 1 CYCLE. 
+
+    DFF(in = currentOut, out = prevOut);
+
+    // Set output to whatever prevOut is; accounts for both active and inactive. 
+    Or(a = prevOut, b = false, out = out);
+
+
+    /*
+    We will use the following:
+    - prevOut
+    - prevIn
+    - currentOut
+    - currentIn
+
+    */
+    
+
+    
+
+}
