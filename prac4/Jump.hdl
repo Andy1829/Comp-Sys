@@ -27,5 +27,16 @@ CHIP Jump {
     OUT jump;           // true if a jump should be performed, false otherwise 
 
 PARTS:
-    // Put your code here:
+    And (a = j1, b = ng, out = ngJumpTrue);
+    And (a = j2, b = zr, out = zeroJumpTrue);
+    
+    Or (a = ng, b = zr, out = statusPin);
+    Not (in = statusPin, out = noStatusPin);
+
+    And (a = j3, b = noStatusPin, out = pstvJumpTrue);
+
+    Or (a = ngJumpTrue, b = zeroJumpTrue, out = ngZeroJump);
+    Or (a = ngZeroJump, b = pstvJumpTrue, out = jump);
+
+
 }

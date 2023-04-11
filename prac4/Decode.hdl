@@ -24,6 +24,38 @@ CHIP Decode {
         d1,d2,d3,           // Destination wires
         j1,j2,j3;           // Jump wires
 
-PARTS:
-    // Put your code here:
+PARTS:    
+    And (a = in[15], b = true, out = type, out = cInstruct);     // Sets type active if c-instruction is called
+
+    And (a = cInstruct, b = in[12], out = a);
+    And (a = cInstruct, b = in[11], out = c1);
+    And (a = cInstruct, b = in[10], out = c2);
+    And (a = cInstruct, b = in[9], out = c3);
+    And (a = cInstruct, b = in[8], out = c4);
+    And (a = cInstruct, b = in[7], out = c5);
+    And (a = cInstruct, b = in[6], out = c6);
+
+    And (a = cInstruct, b = in[5], out = d1True1);
+    And (a = cInstruct, b = in[4], out = d2);
+    And (a = cInstruct, b = in[3], out = d3);
+
+    And (a = cInstruct, b = in[2], out = j1);
+    And (a = cInstruct, b = in[1], out = j2);
+    And (a = cInstruct, b = in[0], out = j3);
+
+    Not (in = in[15], out = instructBitInvert);
+    And (a = instructBitInvert, b = true, out = d1True2);
+
+    Or (a = d1True1, b = d1True2, out = d1);
+
+
+
+
+
+
+
+
+
+
+
 }

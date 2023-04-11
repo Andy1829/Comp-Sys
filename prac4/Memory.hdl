@@ -35,12 +35,13 @@ CHIP Memory {
     // Only operates IF load is asserted, otherwise does nothing
 
     DMux4Way(in = load, sel = address[13..14], a = RAMout1, b = RAMout2, c = scrnOut, d = kbrdOut);
-    Or(a = RAMout1, b = RAMout2, out = RAMout);
+    Or(a = RAMout1, b = RAMout2, out = RAMout);                         // Combines the possibilities of 00 and 01
+                                                                    // Is required for single input buses  
 
     RAM16K(in = in, load = RAMout, address = address[0..13], out = RAMoutTrue);    
     Screen(in = in, load = scrnOut, address = address[0..12], out = scrnOutTrue);
 
-    And (a = address[13], b =address[14], out = kbrdOutTrue);           // Previous kbrdOut doesn't appear to have a use
+    And (a = address[13], b = address[14], out = kbrdOutTrue);           // Previous kbrdOut doesn't appear to have a use
 
     Keyboard(out = kbd);
 

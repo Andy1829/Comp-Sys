@@ -40,4 +40,55 @@ CHIP CPU {
 
     PARTS:
     // Put your code here:
+
+        // Instruction decoding; makes each output bit available for access
+    Decode(in = instruction, type = type, a = a, c1 = c1, c2 = c2,c3 = c3, c4 = c4, c5 = c5, c6 = c6,
+            d1 = d1, d2 = d2, d3 = d3, j1 = j1, j2 = j2, j3 = j3);
+    
+        // Passing instruction through; changing dependent on A/C instruction
+    Mux16(a = outALU, b = instruction, sel = instA, out = aRegInput);
+
+        // A reg. load logic; The A reg. input is load signal, set only if we have A-instruction or C-instruction writing to A reg.
+    Not(in = type, out = AregActive);
+    And(a = AregActive, b = d1, out = instA); // Specifies if is A-instruction
+
+
+    And(a = type, b = d1, out = cLoadA);     
+    Or(a = instA, b = cLoadA, out = loadA);     // If A-instr or C-instr + A dest. bit   
+    
+    And(a = type, b = d2, out = loadD);         // If D reg. is called
+    And(a = type, b = d3, out = loadM, out = writeM);         // If M reg. is called
+
+
+    
+    
+    // Load A logic:
+
+    ARegister(in = aRegInput, load = loadA, out = AOut, out[0..14] = addressM, out = PCin);  
+    
+        // 2nd Mux; selecting A/M
+    Mux16(a = AOut, b = inM, out = outAM, sel = a);     // Selects based on a bit
+
+        // ALU Output handling
+    ALU(x = DOut, y = outAM, zx = c1, nx = c2, zy = c3, ny = c4, f = c5, no = c6, out = outM, out = outALU, zr = zr, ng = ng);
+
+        // D reg. 
+    DRegister(in = outALU, load = loadD, out = DOut);
+
+        // Jump
+    Jump(j1 = j1, j2 = j2, j3 = j3, zr = zr, ng = ng, jump = jump);
+    
+    And(a = jump, b = type, out = jumpTrue);
+
+
+        // Program counter
+    PC(in = PCin, load = jumpTrue, inc = true, reset = reset, out[0..14] = pc);
+
+    
+
+
+
+
+
+
 }
