@@ -19,6 +19,14 @@ Assembler::~Assembler() {
     // Your code here
 }
 
+        /*
+        TESTING:
+        Compile your code by using: g++ ./*.cpp -o Assembler
+        And run it: ./Assembler ./Assembler100.asm
+        The translated result will be printed in your stdout terminal.
+        */
+
+
 /**
  * Assembler first pass; populates symbol table with label locations.
  * @param instructions An array of the assembly language instructions.
@@ -26,6 +34,7 @@ Assembler::~Assembler() {
  */
 void Assembler::buildSymbolTable(SymbolTable* symbolTable, string instructions[], int numOfInst) {
     // Your code here
+    // symbolTable->addSymbol();
 }
 
 /**
@@ -44,8 +53,19 @@ string Assembler::generateMachineCode(SymbolTable* symbolTable, string instructi
  * @param instruction The assembly language representation of an instruction.
  * @return The type of the instruction (A_INSTRUCTION, C_INSTRUCTION, L_INSTRUCTION, NULL)
  */
-Assembler::InstructionType Assembler::parseInstructionType(string instruction) {
-    // Your code here:
+Assembler::InstructionType Assembler::parseInstructionType(string instruction) {                // DONE
+    if (instruction.find("(") != string::npos) {
+        return L_INSTRUCTION;
+    }
+
+    if (instruction.find("@") != string::npos) {
+        return A_INSTRUCTION;
+    }
+
+    if (instruction.find("=") != string::npos || instruction.find(";") != string::npos ) {
+        return C_INSTRUCTION;
+    }
+
     return NULL_INSTRUCTION;
 }
 
@@ -54,9 +74,24 @@ Assembler::InstructionType Assembler::parseInstructionType(string instruction) {
  * @param instruction The assembly language representation of a C-instruction.
  * @return The destination of the instruction (A, D, M, AM, AD, MD, AMD, NULL)
  */
-Assembler::InstructionDest Assembler::parseInstructionDest(string instruction) {
-    // Your code here:
-    return NULL_DEST;
+Assembler::InstructionDest Assembler::parseInstructionDest(string instruction) {                // DONE
+    if (instruction.find("AMD=") != string::npos) {
+        return AMD;
+    } else if (instruction.find("AM=") != string::npos) {
+        return AM;
+    } else if (instruction.find("AD=") != string::npos) {
+        return AD;
+    } else if (instruction.find("MD=") != string::npos) {
+        return MD;
+    } else if (instruction.find("A=") != string::npos) {
+        return A;
+    } else if (instruction.find("M=") != string::npos) {
+        return M;
+    } else if (instruction.find("D=") != string::npos) {
+        return D;
+    } else {
+        return NULL_DEST;
+    }
 }
 
 /**
@@ -64,12 +99,38 @@ Assembler::InstructionDest Assembler::parseInstructionDest(string instruction) {
  * @param instruction The assembly language representation of a C-instruction.
  * @return The jump condition for the instruction (JLT, JGT, JEQ, JLE, JGE, JNE, JMP, NULL)
  */
-Assembler::InstructionJump Assembler::parseInstructionJump(string instruction) {
+Assembler::InstructionJump Assembler::parseInstructionJump(string instruction) {                // DONE
     // Your code here:
     // for example if "JLT" appear at the comp field return enum label JLT
+    if (instruction.find("JGT") != string::npos) {
+        return JGT;
+    }
+
+    if (instruction.find("JEQ") != string::npos) {
+        return JEQ;
+    }
+    
+    if (instruction.find("JGE") != string::npos) {
+        return JGE;
+    }
+    
     if (instruction.find("JLT") != string::npos) {
         return JLT;
     }
+    
+    if (instruction.find("JNE") != string::npos) {
+        return JNE;
+    }
+
+    if (instruction.find("JLE") != string::npos) {
+        return JLE;
+    }
+
+    if (instruction.find("JMP") != string::npos) {
+        return JMP;
+    }
+
+    // Otherwise, return NullJump
     return NULL_JUMP;
 }
 
@@ -102,9 +163,32 @@ string Assembler::parseSymbol(string instruction) {
  * @param dest The destination of the instruction
  * @return A string containing the 3 binary dest bits that correspond to the given dest value.
  */
-string Assembler::translateDest(InstructionDest dest) {
-    // Your code here:
-    return "000";
+string Assembler::translateDest(InstructionDest dest) {                                         // DONE 
+    switch (dest) {
+        case 0:                 // A
+            return "100";
+
+        case 1:                 // D
+            return "010";
+
+        case 2:                 // M
+            return "001";       
+
+        case 3:                 // AM
+            return "101";
+
+        case 4:                 // AD
+            return "110";
+
+        case 5:                 // MD
+            return "011";
+
+        case 6:                 // AMD
+            return "111";
+
+        default:                // NULL
+            return "000";
+    }
 }
 
 /**
@@ -112,9 +196,32 @@ string Assembler::translateDest(InstructionDest dest) {
  * @param jump The jump condition for the instruction
  * @return A string containing the 3 binary jump bits that correspond to the given jump value.
  */
-string Assembler::translateJump(InstructionJump jump) {
-    // Your code here:
-    return "000";
+string Assembler::translateJump(InstructionJump jump) {                                         // DONE
+    switch (jump) {
+        case 0:                 // JLT
+            return "100";
+
+        case 1:                 // JGT
+            return "001";
+
+        case 2:                 // JEQ
+            return "010";       
+
+        case 3:                 // JLE
+            return "110";
+
+        case 4:                 // JGE
+            return "011";
+
+        case 5:                 // JNE
+            return "101";
+
+        case 6:                 // JMP
+            return "111";
+
+        default:                // NULL
+            return "000";
+    }
 }
 
 /**
@@ -123,7 +230,33 @@ string Assembler::translateJump(InstructionJump jump) {
  * @return A string containing the 7 binary computation/op-code bits that correspond to the given comp value.
  */
 string Assembler::translateComp(InstructionComp comp) {
-    // Your code here:
+    
+    
+    switch (comp) {
+        case 0:                 // CONST_0
+            return "101010";
+
+        case 1:                 // CONST_1
+            return "111111";
+
+        case 2:                 // CONST_NEG_1
+            return "111010";       
+
+        case 3:                 // D 
+            return "001100";
+
+        case 4:                 // A // M
+            return "110000";
+
+        case 5:                 // -D 
+            return "001111";
+
+        case 6:                 // AMD
+            return "111";
+
+        default:                // NULL
+            return "000";
+    }
     return "0000000";
 }
 
