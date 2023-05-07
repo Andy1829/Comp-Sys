@@ -2,6 +2,7 @@
 #include "SymbolTable.h"
 
 #include <string>
+#include <bitset>
 
 using namespace std;
 
@@ -44,8 +45,24 @@ void Assembler::buildSymbolTable(SymbolTable* symbolTable, string instructions[]
  * @return A string containing the generated machine code as lines of 16-bit binary instructions.
  */
 string Assembler::generateMachineCode(SymbolTable* symbolTable, string instructions[], int numOfInst) {
-    // Your code here
-    return "";
+    string output = "";
+
+    for (int i = 0; i < numOfInst; i++) {
+        InstructionType type = parseInstructionType(instructions[i]);
+        if (type == 0) {            // A Instruction
+            output += translateSymbol(parseSymbol(instructions[i]), symbolTable);
+            output += "\n";
+        } else if (type == 1) {
+            output += "111";
+            output += translateComp(parseInstructionComp(instructions[i]));
+            output += translateDest(parseInstructionDest(instructions[i]));
+            output += translateJump(parseInstructionJump(instructions[i]));
+            output += "\n";
+
+        }
+    }
+
+    return output;
 }
 
 /**
@@ -142,66 +159,66 @@ Assembler::InstructionJump Assembler::parseInstructionJump(string instruction) {
 Assembler::InstructionComp Assembler::parseInstructionComp(string instruction) {                // DONE 
     // Your code here:
     // for example if "0" appear at the comp field return CONST_0
-    if (instruction.find('=!A') != string::npos || instruction.find('!A;') != string::npos) {
+    if (instruction.find("=!A") != string::npos || instruction.find("!A;") != string::npos) {
         return NOT_A;
     }
-    if (instruction.find('=!M') != string::npos || instruction.find('!M;') != string::npos) {
+    if (instruction.find("=!M") != string::npos || instruction.find("!M;") != string::npos) {
         return NOT_M;
     }
-    if (instruction.find('=!D') != string::npos || instruction.find('!D;') != string::npos) {
+    if (instruction.find("=!D") != string::npos || instruction.find("!D;") != string::npos) {
         return NOT_D;
     }
-    if (instruction.find('=-A') != string::npos || instruction.find('-A;') != string::npos) {
+    if (instruction.find("=-A") != string::npos || instruction.find("-A;") != string::npos) {
         return NEG_A;
     }
-    if (instruction.find('=-M') != string::npos || instruction.find('-M;') != string::npos) {
+    if (instruction.find("=-M") != string::npos || instruction.find("-M;") != string::npos) {
         return NEG_M;
     }
-    if (instruction.find('=-D') != string::npos || instruction.find('-D;') != string::npos) {
+    if (instruction.find("=-D") != string::npos || instruction.find("-D;") != string::npos) {
         return NEG_D;
     }
-    if (instruction.find('=A+1') != string::npos || instruction.find('A+1;') != string::npos) {
+    if (instruction.find("=A+1") != string::npos || instruction.find("A+1;") != string::npos) {
         return A_ADD_1;
     }
-    if (instruction.find('=M+1') != string::npos || instruction.find('M+1;') != string::npos) {
+    if (instruction.find("=M+1") != string::npos || instruction.find("M+1;") != string::npos) {
         return M_ADD_1;
     }
-    if (instruction.find('=D+1') != string::npos || instruction.find('D+1;') != string::npos) {
+    if (instruction.find("=D+1") != string::npos || instruction.find("D+1;") != string::npos) {
         return D_ADD_1;
     }
-    if (instruction.find('=A-1') != string::npos || instruction.find('A-1;') != string::npos) {
+    if (instruction.find("=A-1") != string::npos || instruction.find("A-1;") != string::npos) {
         return A_SUB_1;
     }
-    if (instruction.find('=M-D') != string::npos || instruction.find('M-D;') != string::npos) {
+    if (instruction.find("=M-D") != string::npos || instruction.find("M-D;") != string::npos) {
         return M_SUB_D;
     }
-    if (instruction.find('=D&A') != string::npos || instruction.find('D&A;') != string::npos) {
+    if (instruction.find("=D&A") != string::npos || instruction.find("D&A;") != string::npos) {
         return D_AND_A;
     }
-    if (instruction.find('=D&M') != string::npos || instruction.find('D&M;') != string::npos) {
+    if (instruction.find("=D&M") != string::npos || instruction.find("D&M;") != string::npos) {
         return D_AND_M;
     }
-    if (instruction.find('=D|A') != string::npos || instruction.find('D|A;') != string::npos) {
+    if (instruction.find("=D|A") != string::npos || instruction.find("D|A;") != string::npos) {
         return D_OR_A;
     }
 
     // DO THE PREVIOUS CHECKS FIRST, these must be more precise.
-    if (instruction.find('=0') != string::npos || instruction.find('0;') != string::npos) {
+    if (instruction.find("=0") != string::npos || instruction.find("0;") != string::npos) {
         return CONST_0;
     }
-    if (instruction.find('=1') != string::npos || instruction.find('1;') != string::npos) {
+    if (instruction.find("=1") != string::npos || instruction.find("1;") != string::npos) {
         return CONST_1;
     }
-    if (instruction.find('=-1') != string::npos || instruction.find('-1;') != string::npos) {
+    if (instruction.find("=-1") != string::npos || instruction.find("-1;") != string::npos) {
         return CONST_NEG_1;
     }
-    if (instruction.find('=A') != string::npos || instruction.find('A;') != string::npos) {
+    if (instruction.find("=A") != string::npos || instruction.find("A;") != string::npos) {
         return VAL_A;
     }
-    if (instruction.find('=M') != string::npos || instruction.find('M;') != string::npos) {
+    if (instruction.find("=M") != string::npos || instruction.find("M;") != string::npos) {
         return VAL_M;
     }
-    if (instruction.find('=D') != string::npos || instruction.find('D;') != string::npos) {
+    if (instruction.find("=D") != string::npos || instruction.find("D;") != string::npos) {
         return VAL_D;
     }
 
@@ -215,7 +232,29 @@ Assembler::InstructionComp Assembler::parseInstructionComp(string instruction) {
  * @return A string containing either a label name (L-instruction),
  *         a variable name (A-instruction), or a constant integer value (A-instruction)
  */
-string Assembler::parseSymbol(string instruction) {
+string Assembler::parseSymbol(string instruction) {                                         // DONE; PROBS
+    InstructionType type = parseInstructionType(instruction);
+    string result = "";
+
+    if (type == 0) {                    // A Instruction
+        for (int i = 0; i < instruction.size(); i++) {
+            if (instruction[i] != '@') {
+                result += instruction[i];
+            }
+        }
+        return result;
+
+    } else if (type == 3) {             // Null Instruction
+        return "";
+    } else if (type == 2) {
+        int startIterator = instruction.find("(");
+        int endIterator = instruction.find(")");
+        
+        string symbolName;
+        symbolName.append(startIterator, endIterator);
+        return symbolName;
+    }
+    
     return "";
 }
 
@@ -329,9 +368,9 @@ string Assembler::translateComp(InstructionComp comp) {                         
         case 17:                 // D - 1
             return "0001110";
         case 18:                 // D + A
-            return "1110000";
+            return "0000010";
         case 19:                 // D + M
-            return "0001100";
+            return "1000010";
         case 20:                 // D - A
             return "0010011";
         case 21:                // D - M
@@ -360,7 +399,12 @@ string Assembler::translateComp(InstructionComp comp) {                         
  * @param symbolTable The symbol table for looking up label/variable names
  * @return A string containing the 15 binary bits that correspond to the given sybmol.
  */
-string Assembler::translateSymbol(string symbol, SymbolTable* symbolTable) {
-    // Your code here:
-    return "0000000000000000";
+string Assembler::translateSymbol(string symbol, SymbolTable* symbolTable) {            // DONE; PROBS
+    // For A instruction:
+    int decimal = stoi(symbol);
+    string binary = bitset<16>(decimal).to_string();
+
+    // string binary = bitset<16> (symbolTable->getSymbol(symbol)).to_string();
+    return binary;  
+
 }
