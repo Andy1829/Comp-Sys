@@ -201,6 +201,9 @@ Assembler::InstructionComp Assembler::parseInstructionComp(string instruction) {
     if (instruction.find("D|A") != string::npos) {
         return D_OR_A;
     } else
+    if (instruction.find("D|M") != string::npos) {
+        return D_OR_M;
+    } else
 
     // DO THE PREVIOUS CHECKS FIRST, these must be more precise.
     if (instruction.find("0") != string::npos) {
@@ -275,25 +278,18 @@ string Assembler::translateDest(InstructionDest dest) {                         
     switch (dest) {
         case 0:                 // A
             return "100";
-
         case 1:                 // D
             return "010";
-
         case 2:                 // M
             return "001";       
-
         case 3:                 // AM
             return "101";
-
         case 4:                 // AD
             return "110";
-
         case 5:                 // MD
             return "011";
-
         case 6:                 // AMD
             return "111";
-
         default:                // NULL
             return "000";
     }
@@ -308,25 +304,18 @@ string Assembler::translateJump(InstructionJump jump) {                         
     switch (jump) {
         case 0:                 // JLT
             return "100";
-
         case 1:                 // JGT
             return "001";
-
         case 2:                 // JEQ
             return "010";       
-
         case 3:                 // JLE
             return "110";
-
         case 4:                 // JGE
             return "011";
-
         case 5:                 // JNE
             return "101";
-
         case 6:                 // JMP
             return "111";
-
         default:                // NULL
             return "000";
     }
