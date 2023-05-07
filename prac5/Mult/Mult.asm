@@ -20,8 +20,7 @@
 
     // Subtracting twice; i.e Converting to +ve
     @R1
-    D = D - M
-    D = D - M
+    D = -D
 
 (IF_PTV)
     @temp           // Stores absolute value of RAM[1] to use as an iterator

@@ -10,6 +10,7 @@ using namespace std;
 class SymbolTable {
    private:
         map <string, uint16_t> table;
+        int curr_RAM_index = 16;
    
    public:
     SymbolTable();
@@ -17,6 +18,8 @@ class SymbolTable {
 
     void addSymbol(string symbol, uint16_t value);
     int getSymbol(string symbol);
+    void iterateRam() {curr_RAM_index++;}
+    int returnRam() {return curr_RAM_index;}
 };
 
 #endif /* SYMBOL_TABLE_H */

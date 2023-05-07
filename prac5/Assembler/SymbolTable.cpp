@@ -59,7 +59,7 @@ void SymbolTable::addSymbol(string symbol, uint16_t value) {
  */
 int SymbolTable::getSymbol(string symbol) {
     if (table.find(symbol) != table.end()) {
-        return table.find(symbol) -> second;
+        return table.find(symbol)->second;
 
     } else {
         return -1;

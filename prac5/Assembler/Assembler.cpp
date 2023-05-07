@@ -35,7 +35,27 @@ Assembler::~Assembler() {
  */
 void Assembler::buildSymbolTable(SymbolTable* symbolTable, string instructions[], int numOfInst) {
     // Your code here
-    // symbolTable->addSymbol();
+    for (int i = 0; i < numOfInst; i++) {
+        InstructionType type = parseInstructionType(instructions[i]);
+        string symbol = parseSymbol(instructions[i]);
+        
+        if (type == L_INSTRUCTION) {
+            symbolTable->addSymbol(symbol, i);              // Adds (symbol and lineNum)
+
+        } else if (type == A_INSTRUCTION) {
+            if (isdigit(symbol[1])) {                       // If symbol after @ is a digit
+                return;
+
+            } else {
+                symbolTable->addSymbol(symbol, symbolTable->returnRam());
+                symbolTable->iterateRam();
+            }
+
+        }
+    }
+    
+
+
 }
 
 /**
@@ -46,6 +66,7 @@ void Assembler::buildSymbolTable(SymbolTable* symbolTable, string instructions[]
  */
 string Assembler::generateMachineCode(SymbolTable* symbolTable, string instructions[], int numOfInst) {
     string output = "";
+    buildSymbolTable(symbolTable, instructions, numOfInst);
 
     for (int i = 0; i < numOfInst; i++) {
         InstructionType type = parseInstructionType(instructions[i]);
