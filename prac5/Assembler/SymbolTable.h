@@ -8,6 +8,9 @@
 using namespace std;
 
 class SymbolTable {
+   private:
+        map <string, uint16_t> table;
+   
    public:
     SymbolTable();
     ~SymbolTable();

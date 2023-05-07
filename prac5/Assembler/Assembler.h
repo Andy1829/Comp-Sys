@@ -46,30 +46,30 @@ class Assembler {
         CONST_0,
         CONST_1,
         CONST_NEG_1,
-        VAL_A,
+        VAL_A,      // 3
         VAL_M,
         VAL_D,
-        NOT_A,
+        NOT_A,      // 6
         NOT_M,
         NOT_D,
-        NEG_A,
+        NEG_A,      // 9
         NEG_M,
         NEG_D,
-        A_ADD_1,
+        A_ADD_1,    // 12
         M_ADD_1,
         D_ADD_1,
-        A_SUB_1,
+        A_SUB_1,    // 15
         M_SUB_1,
         D_SUB_1,
-        D_ADD_A,
+        D_ADD_A,    // 18
         D_ADD_M,
         D_SUB_A,
-        D_SUB_M,
-        A_SUB_D,
+        D_SUB_M,    // 21
+        A_SUB_D,    
         M_SUB_D,
         D_AND_A,
         D_AND_M,
-        D_OR_A,
+        D_OR_A,     // 26
         D_OR_M,
         NULL_COMP
     };

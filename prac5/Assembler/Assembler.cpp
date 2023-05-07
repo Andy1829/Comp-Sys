@@ -139,12 +139,73 @@ Assembler::InstructionJump Assembler::parseInstructionJump(string instruction) {
  * @param instruction The assembly language representation of a C-instruction.
  * @return The computation/op-code of the instruction (CONST_0, ... ,D_ADD_A , ... , NULL)
  */
-Assembler::InstructionComp Assembler::parseInstructionComp(string instruction) {
+Assembler::InstructionComp Assembler::parseInstructionComp(string instruction) {                // DONE 
     // Your code here:
     // for example if "0" appear at the comp field return CONST_0
-    if (instruction.find("0") != string::npos) {
+    if (instruction.find('=!A') != string::npos || instruction.find('!A;') != string::npos) {
+        return NOT_A;
+    }
+    if (instruction.find('=!M') != string::npos || instruction.find('!M;') != string::npos) {
+        return NOT_M;
+    }
+    if (instruction.find('=!D') != string::npos || instruction.find('!D;') != string::npos) {
+        return NOT_D;
+    }
+    if (instruction.find('=-A') != string::npos || instruction.find('-A;') != string::npos) {
+        return NEG_A;
+    }
+    if (instruction.find('=-M') != string::npos || instruction.find('-M;') != string::npos) {
+        return NEG_M;
+    }
+    if (instruction.find('=-D') != string::npos || instruction.find('-D;') != string::npos) {
+        return NEG_D;
+    }
+    if (instruction.find('=A+1') != string::npos || instruction.find('A+1;') != string::npos) {
+        return A_ADD_1;
+    }
+    if (instruction.find('=M+1') != string::npos || instruction.find('M+1;') != string::npos) {
+        return M_ADD_1;
+    }
+    if (instruction.find('=D+1') != string::npos || instruction.find('D+1;') != string::npos) {
+        return D_ADD_1;
+    }
+    if (instruction.find('=A-1') != string::npos || instruction.find('A-1;') != string::npos) {
+        return A_SUB_1;
+    }
+    if (instruction.find('=M-D') != string::npos || instruction.find('M-D;') != string::npos) {
+        return M_SUB_D;
+    }
+    if (instruction.find('=D&A') != string::npos || instruction.find('D&A;') != string::npos) {
+        return D_AND_A;
+    }
+    if (instruction.find('=D&M') != string::npos || instruction.find('D&M;') != string::npos) {
+        return D_AND_M;
+    }
+    if (instruction.find('=D|A') != string::npos || instruction.find('D|A;') != string::npos) {
+        return D_OR_A;
+    }
+
+    // DO THE PREVIOUS CHECKS FIRST, these must be more precise.
+    if (instruction.find('=0') != string::npos || instruction.find('0;') != string::npos) {
         return CONST_0;
     }
+    if (instruction.find('=1') != string::npos || instruction.find('1;') != string::npos) {
+        return CONST_1;
+    }
+    if (instruction.find('=-1') != string::npos || instruction.find('-1;') != string::npos) {
+        return CONST_NEG_1;
+    }
+    if (instruction.find('=A') != string::npos || instruction.find('A;') != string::npos) {
+        return VAL_A;
+    }
+    if (instruction.find('=M') != string::npos || instruction.find('M;') != string::npos) {
+        return VAL_M;
+    }
+    if (instruction.find('=D') != string::npos || instruction.find('D;') != string::npos) {
+        return VAL_D;
+    }
+
+
     return NULL_COMP;
 }
 
@@ -229,35 +290,68 @@ string Assembler::translateJump(InstructionJump jump) {                         
  * @param comp The computation/op-code for the instruction
  * @return A string containing the 7 binary computation/op-code bits that correspond to the given comp value.
  */
-string Assembler::translateComp(InstructionComp comp) {
-    
-    
+string Assembler::translateComp(InstructionComp comp) {                                         // DONE
     switch (comp) {
         case 0:                 // CONST_0
-            return "101010";
-
+            return "0101010";
         case 1:                 // CONST_1
-            return "111111";
-
+            return "0111111";
         case 2:                 // CONST_NEG_1
-            return "111010";       
-
-        case 3:                 // D 
-            return "001100";
-
-        case 4:                 // A // M
-            return "110000";
-
-        case 5:                 // -D 
-            return "001111";
-
-        case 6:                 // AMD
-            return "111";
-
+            return "0111010";       
+        case 3:                 // A
+            return "0110000";
+        case 4:                 // M
+            return "1110000";
+        case 5:                 // D
+            return "0001100";
+        case 6:                 // !A
+            return "0110001";
+        case 7:                 // !M
+            return "1110001";
+        case 8:                 // !D
+            return "0001101";
+        case 9:                 // -A
+            return "0110011";       
+        case 10:                // -M
+            return "1110011";
+        case 11:                // -D
+            return "0001111";
+        case 12:                // A + 1
+            return "0110111";
+        case 13:                // M + 1
+            return "1110111";   
+        case 14:                // D + 1
+            return "0011111";
+        case 15:                 // A - 1
+            return "0110010";
+        case 16:                 // M - 1
+            return "1110010";       
+        case 17:                 // D - 1
+            return "0001110";
+        case 18:                 // D + A
+            return "1110000";
+        case 19:                 // D + M
+            return "0001100";
+        case 20:                 // D - A
+            return "0010011";
+        case 21:                // D - M
+            return "1010011";   
+        case 22:                // A - D
+            return "0000111";
+        case 23:                 // M - D
+            return "1000111";
+        case 24:                 // D & A
+            return "0000000";       
+        case 25:                 // D & M
+            return "1000000";
+        case 26:                 // D | A
+            return "0010101";
+        case 27:                 // D | M
+            return "1010101";
+        
         default:                // NULL
-            return "000";
+            return "0000000";
     }
-    return "0000000";
 }
 
 /**
