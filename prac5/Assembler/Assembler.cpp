@@ -168,15 +168,7 @@ Assembler::InstructionComp Assembler::parseInstructionComp(string instruction) {
     if (instruction.find("!D") != string::npos) {
         return NOT_D;
     } else
-    if (instruction.find("-A") != string::npos) {
-        return NEG_A;
-    } else
-    if (instruction.find("-M") != string::npos) {
-        return NEG_M;
-    } else
-    if (instruction.find("-D") != string::npos) {
-        return NEG_D;
-    } else
+
     if (instruction.find("A+1") != string::npos) {
         return A_ADD_1;
     } else
@@ -188,6 +180,29 @@ Assembler::InstructionComp Assembler::parseInstructionComp(string instruction) {
     } else
     if (instruction.find("A-1") != string::npos) {
         return A_SUB_1;
+    } else
+    if (instruction.find("M-1") != string::npos) {
+        return M_SUB_1;
+    } else
+    if (instruction.find("D-1") != string::npos) {
+        return D_SUB_1;
+    } else
+
+    if (instruction.find("D+A") != string::npos) {
+        return D_ADD_A;
+    } else
+    if (instruction.find("D+M") != string::npos) {
+        return D_ADD_M;
+    } else
+
+    if (instruction.find("D-A") != string::npos) {
+        return D_SUB_A;
+    } else
+    if (instruction.find("D-M") != string::npos) {
+        return D_SUB_M;
+    } else
+    if (instruction.find("A-D") != string::npos) {
+        return A_SUB_D;
     } else
     if (instruction.find("M-D") != string::npos) {
         return M_SUB_D;
@@ -203,6 +218,15 @@ Assembler::InstructionComp Assembler::parseInstructionComp(string instruction) {
     } else
     if (instruction.find("D|M") != string::npos) {
         return D_OR_M;
+    } else
+    if (instruction.find("-A") != string::npos) {
+        return NEG_A;
+    } else
+    if (instruction.find("-M") != string::npos) {
+        return NEG_M;
+    } else
+    if (instruction.find("-D") != string::npos) {
+        return NEG_D;
     } else
 
     // DO THE PREVIOUS CHECKS FIRST, these must be more precise.
