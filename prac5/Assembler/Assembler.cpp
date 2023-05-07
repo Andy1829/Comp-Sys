@@ -35,25 +35,44 @@ Assembler::~Assembler() {
  */
 void Assembler::buildSymbolTable(SymbolTable* symbolTable, string instructions[], int numOfInst) {
     // Your code here
+    InstructionType type;
+    string symbol;
+    int lineNum = 0;
+
+    // First Pass; puts LABELS into SymbolTable
     for (int i = 0; i < numOfInst; i++) {
-        InstructionType type = parseInstructionType(instructions[i]);
-        string symbol = parseSymbol(instructions[i]);
+        // Determines type + symbol in each instruction
+        type = parseInstructionType(instructions[i]);
+        symbol = parseSymbol(instructions[i]);
         
         if (type == L_INSTRUCTION) {
-            symbolTable->addSymbol(symbol, i);              // Adds (symbol and lineNum)
+            symbolTable->addSymbol(symbol, lineNum);              // Adds (symbol and lineNum; refering to next line)
+            lineNum--;          // Negates the iterating; remember that (XXX) doesn't count for lineNum
+        }
 
-        } else if (type == A_INSTRUCTION) {
-            if (isdigit(symbol[1])) {                       // If symbol after @ is a digit
-                return;
+        lineNum++;              // Starts at 0, iterates to numOfInst - 1
+    }
 
-            } else {
+    // Second Pass; all NEW VAR. are put into SymbolTable
+    for (int i = 0; i < numOfInst; i++) {
+        // Determines type + symbol in each instruction
+        type = parseInstructionType(instructions[i]);
+        symbol = parseSymbol(instructions[i]);
+
+        if (type == A_INSTRUCTION) {
+            if (!isdigit(symbol[0])) {          // If A inst. doesn't start with NUMBER
                 symbolTable->addSymbol(symbol, symbolTable->returnRam());
                 symbolTable->iterateRam();
+                
+                //   => implies that it is a varName 
             }
-
         }
+
     }
+
     
+
+
 
 
 }
@@ -66,7 +85,6 @@ void Assembler::buildSymbolTable(SymbolTable* symbolTable, string instructions[]
  */
 string Assembler::generateMachineCode(SymbolTable* symbolTable, string instructions[], int numOfInst) {
     string output = "";
-    buildSymbolTable(symbolTable, instructions, numOfInst);
 
     for (int i = 0; i < numOfInst; i++) {
         InstructionType type = parseInstructionType(instructions[i]);
