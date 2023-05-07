@@ -83,7 +83,7 @@ Assembler::InstructionType Assembler::parseInstructionType(string instruction) {
         return C_INSTRUCTION;
     }
 
-    return NULL_INSTRUCTION;
+    return C_INSTRUCTION;
 }
 
 /**
@@ -159,69 +159,77 @@ Assembler::InstructionJump Assembler::parseInstructionJump(string instruction) {
 Assembler::InstructionComp Assembler::parseInstructionComp(string instruction) {                // DONE 
     // Your code here:
     // for example if "0" appear at the comp field return CONST_0
-    if (instruction.find("=!A") != string::npos || instruction.find("!A;") != string::npos) {
+    if (instruction.find("!A") != string::npos) {
         return NOT_A;
-    }
-    if (instruction.find("=!M") != string::npos || instruction.find("!M;") != string::npos) {
+    } else
+    if (instruction.find("!M") != string::npos) {
         return NOT_M;
-    }
-    if (instruction.find("=!D") != string::npos || instruction.find("!D;") != string::npos) {
+    } else
+    if (instruction.find("!D") != string::npos) {
         return NOT_D;
-    }
-    if (instruction.find("=-A") != string::npos || instruction.find("-A;") != string::npos) {
+    } else
+    if (instruction.find("-A") != string::npos) {
         return NEG_A;
-    }
-    if (instruction.find("=-M") != string::npos || instruction.find("-M;") != string::npos) {
+    } else
+    if (instruction.find("-M") != string::npos) {
         return NEG_M;
-    }
-    if (instruction.find("=-D") != string::npos || instruction.find("-D;") != string::npos) {
+    } else
+    if (instruction.find("-D") != string::npos) {
         return NEG_D;
-    }
-    if (instruction.find("=A+1") != string::npos || instruction.find("A+1;") != string::npos) {
+    } else
+    if (instruction.find("A+1") != string::npos) {
         return A_ADD_1;
-    }
-    if (instruction.find("=M+1") != string::npos || instruction.find("M+1;") != string::npos) {
+    } else
+    if (instruction.find("M+1") != string::npos) {
         return M_ADD_1;
-    }
-    if (instruction.find("=D+1") != string::npos || instruction.find("D+1;") != string::npos) {
+    } else
+    if (instruction.find("D+1") != string::npos) {
         return D_ADD_1;
-    }
-    if (instruction.find("=A-1") != string::npos || instruction.find("A-1;") != string::npos) {
+    } else
+    if (instruction.find("A-1") != string::npos) {
         return A_SUB_1;
-    }
-    if (instruction.find("=M-D") != string::npos || instruction.find("M-D;") != string::npos) {
+    } else
+    if (instruction.find("M-D") != string::npos) {
         return M_SUB_D;
-    }
-    if (instruction.find("=D&A") != string::npos || instruction.find("D&A;") != string::npos) {
+    } else
+    if (instruction.find("D&A") != string::npos) {
         return D_AND_A;
-    }
-    if (instruction.find("=D&M") != string::npos || instruction.find("D&M;") != string::npos) {
+    } else
+    if (instruction.find("D&M") != string::npos) {
         return D_AND_M;
-    }
-    if (instruction.find("=D|A") != string::npos || instruction.find("D|A;") != string::npos) {
+    } else
+    if (instruction.find("D|A") != string::npos) {
         return D_OR_A;
-    }
+    } else
 
     // DO THE PREVIOUS CHECKS FIRST, these must be more precise.
-    if (instruction.find("=0") != string::npos || instruction.find("0;") != string::npos) {
+    if (instruction.find("0") != string::npos) {
         return CONST_0;
-    }
-    if (instruction.find("=1") != string::npos || instruction.find("1;") != string::npos) {
-        return CONST_1;
-    }
-    if (instruction.find("=-1") != string::npos || instruction.find("-1;") != string::npos) {
+    } else
+    if (instruction.find("-1") != string::npos) {
         return CONST_NEG_1;
-    }
+    } else
+    if (instruction.find("1") != string::npos) {
+        return CONST_1;
+    } else
     if (instruction.find("=A") != string::npos || instruction.find("A;") != string::npos) {
         return VAL_A;
-    }
+    } else
     if (instruction.find("=M") != string::npos || instruction.find("M;") != string::npos) {
         return VAL_M;
-    }
+    } else
     if (instruction.find("=D") != string::npos || instruction.find("D;") != string::npos) {
         return VAL_D;
-    }
-
+    } else
+    if (instruction[0] == 'A') {
+        return VAL_A;
+    } else
+    if (instruction[0] == 'M') {
+        return VAL_M;
+    } else
+    if (instruction[0] == 'D') {
+        return VAL_D;
+    } 
 
     return NULL_COMP;
 }
