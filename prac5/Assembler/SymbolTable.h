@@ -18,8 +18,9 @@ class SymbolTable {
 
     void addSymbol(string symbol, uint16_t value);
     int getSymbol(string symbol);
-    void iterateRam() {curr_RAM_index++;}
-    int returnRam() {return curr_RAM_index;}
+    int returnRam() {curr_RAM_index++; return curr_RAM_index;}
+
+    void print();
 };
 
 #endif /* SYMBOL_TABLE_H */

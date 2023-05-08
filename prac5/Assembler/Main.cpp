@@ -50,5 +50,7 @@ int main(int argc, char** argv) {
         string code = assembler.generateMachineCode(&symbolTable, instructions, instructionList.size());
         // Print output
         cout << code << endl;
+
+        // symbolTable.print();
     }
 }

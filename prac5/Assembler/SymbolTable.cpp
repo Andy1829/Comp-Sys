@@ -1,6 +1,7 @@
 #include "SymbolTable.h"
 
 #include <string>
+#include <iostream>
 
 /**
  * Symbol Table constructor
@@ -48,7 +49,10 @@ SymbolTable::~SymbolTable() {
  * @param value The address for the symbol
  */
 void SymbolTable::addSymbol(string symbol, uint16_t value) {
-    table.insert(pair<string, int> (symbol, value));
+    // table.insert(pair<string, int> (symbol, value));
+    if (getSymbol(symbol) == -1) {              // If the symbol does not exist in memory, insert
+        table.insert({symbol, value});          // Trying it with initialisation form
+    }
 
 }
 
@@ -58,10 +62,18 @@ void SymbolTable::addSymbol(string symbol, uint16_t value) {
  * @return The address for the symbol or -1 if the symbol isn't in the table
  */
 int SymbolTable::getSymbol(string symbol) {
+    // If the symbol key can be found, the corresponding value will be output
     if (table.find(symbol) != table.end()) {
         return table.find(symbol)->second;
-
+    // Otherwise, give error value
     } else {
         return -1;
     }
+}
+
+
+void SymbolTable::print(){
+    for (const auto&pair: table) {
+        std::cout << "{" << pair.first << ": " << pair.second << "}\n";
+    }    
 }

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <bitset>
+#include <iostream>
 
 using namespace std;
 
@@ -47,6 +48,7 @@ void Assembler::buildSymbolTable(SymbolTable* symbolTable, string instructions[]
         
         if (type == L_INSTRUCTION) {
             symbolTable->addSymbol(symbol, lineNum);              // Adds (symbol and lineNum; refering to next line)
+            cout << "Add Label: " << symbol << endl;
             lineNum--;          // Negates the iterating; remember that (XXX) doesn't count for lineNum
         }
 
@@ -60,21 +62,22 @@ void Assembler::buildSymbolTable(SymbolTable* symbolTable, string instructions[]
         symbol = parseSymbol(instructions[i]);
 
         if (type == A_INSTRUCTION) {
-            if (!isdigit(symbol[0])) {          // If A inst. doesn't start with NUMBER
+            if (symbol[0] == 'R' && isdigit(symbol[1]) && symbol[1] <= 15) {        // If instruction is @Rx (where x is a number up 15)
+                return;                     // Should do nothing to existing Rx maps
+            } else if (symbolTable->getSymbol(symbol) == -1) {                      // If non-Rx pair already exists
                 symbolTable->addSymbol(symbol, symbolTable->returnRam());
-                symbolTable->iterateRam();
-                
-                //   => implies that it is a varName 
+            } else {
+                // std::cout << "tester" << std::endl;
+                symbolTable->addSymbol(symbol, symbolTable->returnRam());
             }
+            
+            // if (!isdigit(symbol[0]) && (symbol[0] !='R' && !isdigit(symbol[1]))) {          // If A inst. doesn't start with NUMBER
+            //     symbolTable->addSymbol(symbol, symbolTable->returnRam());
+                
+            //     //   => implies that it is a varName 
+            // }
         }
-
     }
-
-    
-
-
-
-
 }
 
 /**
@@ -316,20 +319,20 @@ string Assembler::parseSymbol(string instruction) {                             
                 result += instruction[i];
             }
         }
-        return result;
 
     } else if (type == 3) {             // Null Instruction
         return "";
+
     } else if (type == 2) {
-        int startIterator = instruction.find("(");
-        int endIterator = instruction.find(")");
-        
-        string symbolName;
-        symbolName.append(startIterator, endIterator);
-        return symbolName;
+        for (int i = 0; i < instruction.size(); i++) {
+            if (instruction[i] != '(' && instruction[i] != ')') {
+                result += instruction[i];
+            }
+        }
+
     }
     
-    return "";
+    return result;
 }
 
 /**
@@ -460,9 +463,18 @@ string Assembler::translateComp(InstructionComp comp) {                         
  * @return A string containing the 15 binary bits that correspond to the given sybmol.
  */
 string Assembler::translateSymbol(string symbol, SymbolTable* symbolTable) {            // DONE; PROBS
-    // For A instruction:
-    int decimal = stoi(symbol);
-    string binary = bitset<16>(decimal).to_string();
+    
+    int value = 0;
+
+    if (symbolTable->getSymbol(symbol) != -1) {     // If no error => A key was found corresponding to the symbol
+        value = symbolTable->getSymbol(symbol);       // Returns associated value  
+
+    } else {
+        // If an error has occured, it means that the symbol started with numbers => A instruction
+        value = stoi(symbol);
+    }
+    
+    string binary = bitset<16>(value).to_string();
 
     // string binary = bitset<16> (symbolTable->getSymbol(symbol)).to_string();
     return binary;  
