@@ -1,0 +1,65 @@
+    // I'm currently having issues understanding how to access RAM[i]
+    // YOUTUBE CHANNEL!!!!!!!!
+    
+    @R1
+    A = M       // Array first index into A
+                // A HAS BEEN UPDATED, M NOW POINTS TO RAM[A]
+    D = M       
+
+
+
+
+
+
+
+
+
+
+    given D = i
+    
+    @i 
+    D = m               // This is how I would access if this was possible, but this isn't a valid implementation   
+    
+    
+    
+    @R1
+    D = M               // Grabs val of RAM[1]
+
+    @R0
+    M = D + A
+
+    @R1
+    D = M
+
+    @currentMin
+    M = D               // Grabs val of first element
+    D = M
+
+
+
+
+
+
+
+
+
+
+        @iterator
+    M = 1
+    D = M
+
+    @R1
+    //D = M           // The RAM value is saved here; R1 = 20
+    D = M + D
+
+    @temp
+    M = D
+    @17
+    D = A
+
+    @temp
+    A = M
+    M = D
+
+    @R0
+    M = D

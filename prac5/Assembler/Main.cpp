@@ -51,6 +51,6 @@ int main(int argc, char** argv) {
         // Print output
         cout << code << endl;
 
-        // symbolTable.print();
+        symbolTable.print();
     }
 }
