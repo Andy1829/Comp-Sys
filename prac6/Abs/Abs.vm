@@ -1,8 +1,21 @@
 // Calculates y = |x|
 // x & y are static variables
 
-// Put your code here.
+push constant 0
+push static 0
+lt                          // Returns 0 if 0 < x; returns -1 (true) if x < 0
 
+if-goto POSITIVE            // Goes to label if receives 0
+// If x < 0:
+
+push constant 0
+push static 0               // 1st -ve
+
+sub
+
+
+label POSITIVE
+pop static 1
 
 
 label END
