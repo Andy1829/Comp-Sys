@@ -3,3 +3,32 @@
 
 // Put your code here.
 
+function ArrMax.arrMax 2    // Arg[0] = Pointer to array; Arg[1] = Length of array
+    push argument 0         // Holds pointer to array location -> address of first index
+    pop pointer 1           // Pushes address into pointer 1
+    
+    push that 0             // LCL[0] holds Max val.
+    pop local 0             
+
+    push constant 1         // LCL[1] holds index i = 1 (we iterate to move between address values)
+    pop local 1
+    
+    label START_LOOP
+    push local 1 
+    push argument 1
+
+
+    goto START_LOOP
+
+    
+
+
+
+
+
+
+    push that 0
+    return
+    
+
+    return

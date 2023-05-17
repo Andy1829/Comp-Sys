@@ -3,3 +3,27 @@
 
 // Put your code here.
 
+function Fib.fib 1
+    // BASE CASES; Fib(0) and Fib(1)
+    push argument 0
+    push constant 2
+    lt
+    if-goto LESS_2
+
+    // Skips base cases
+    push argument 0
+    return
+
+    label LESS_2
+    push argument 0
+    push constant 1
+    sub
+    call Fib.fib 1
+
+    push argument 0
+    push constant 2
+    sub
+    call Fib.fib 1
+
+    add
+    return
