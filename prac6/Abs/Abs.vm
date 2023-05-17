@@ -12,9 +12,12 @@ push constant 0
 push static 0               // 1st -ve
 
 sub
+pop static 1
+goto END
 
 
 label POSITIVE
+push static 0
 pop static 1
 
 
