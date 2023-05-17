@@ -35,9 +35,8 @@ push constant 1
 add
 pop temp 0
 
-push constant 0         // Inverting x if it is negative
-push static 0
-sub
+push static 0           // Inverting x if it is negative
+not
 pop temp 1              // Setting Temp[1] = +ve x ONLY
 
 label POSITIVE_X
@@ -56,9 +55,8 @@ push constant 1
 add
 pop temp 0     
 
-push constant 0         // Inverting y if it is negative
-push static 1
-sub
+push static 1           // Inverting y if it is negative
+not
 pop temp 2              // Setting Temp[2] = +ve y ONLY
 
 
