@@ -142,8 +142,6 @@ goto START_CALC
 label ONE_NEG
 push temp 6
 neg
-push constant 1
-add
 
 pop local 0
 
