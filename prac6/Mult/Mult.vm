@@ -121,10 +121,16 @@ if-goto ONE_NEG
 
 push temp 6
 pop local 0
+push constant 0
+pop temp 0              // RESET NEGATIVE COUNTER
 
 
 label END
 goto END
+
+
+
+
 
 label X_SMALLER
 push temp 1
@@ -134,10 +140,15 @@ pop temp 4
 goto START_CALC
 
 label ONE_NEG
-push constant 0
 push temp 6
-sub
+neg
+push constant 1
+add
+
 pop local 0
+
+push constant 0
+pop temp 0              // RESET NEGATIVE COUNTER
 goto END
 
 
