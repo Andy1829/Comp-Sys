@@ -3,8 +3,8 @@
 // Appendix B of the book "The Elements of Computing Systems"
 
 load,
-output-file Fib01.out,
-compare-to Fib01.cmp,
+output-file Fib02.out,
+compare-to Fib02.cmp,
 output-list sp%D1.6.1 local%D1.6.1 argument%D1.8.1 this%D1.6.1 that%D1.6.1
             RAM[16]%D1.6.1 RAM[17]%D1.6.1 RAM[18]%D1.6.1
             local[0]%D1.8.1 local[1]%D1.8.1 local[2]%D1.8.1
@@ -16,10 +16,11 @@ set argument 400,  // base address of the argument segment
 set this 3000,     // base address of the this segment
 set that 3010,     // base address of the that segment
 
-// TESTING FOR BASE CASES
+
+// TESTING FOR SMALL RANGE
 
 set RAM[16] 0,  // static 0
-set RAM[17] 0,  // static 1
+set RAM[17] 1,  // static 1
 set RAM[18] 0,  // static 2
 
 set local[0] 10,  // local 0
@@ -34,6 +35,3 @@ repeat 200 {        // Change this number to cover the number of instructions in
   vmstep;
 }
 output;
-
-// I would also like to test for negative input arguments and cases above 6, but the code does NOT have the functionality 
-// to work with these. 
