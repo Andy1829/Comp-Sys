@@ -19,10 +19,10 @@ VMTranslator::~VMTranslator() {
 }
 
 /** Generate Hack Assembly code for a VM push operation */
-string VMTranslator::vm_push(string segment, int offset){
+string VMTranslator::vm_push(string segment, int offset){           // DONE 
     string output;
     
-    if (segment == "argument") {
+    if (segment == "argument") {                    // DONE
         output.append("@ARG\n");
         output.append("D=M\n");
 
@@ -33,26 +33,69 @@ string VMTranslator::vm_push(string segment, int offset){
         output.append("A=D+A\n");
         output.append("D=M\n");
 
-    } else if (segment == "local") {
+    } else if (segment == "local") {                // DONE
+        output.append("@LCL\n");
+        output.append("D=M\n");
 
-    } else if (segment == "static") {
-        
-    } else if (segment == "constant") {
         output.append("@");
         output.append(to_string(offset));
         output.append("\n");
+
+        output.append("A=D+A\n");
+        output.append("D=M\n");
+
+    } else if (segment == "static") {               // DONE
+        output.append("@");
+        output.append(to_string(offset));
+        output.append("\n");
+
+        output.append("D=M\n");
+
+    } else if (segment == "constant") {             // DONE
+        output.append("@");
+        output.append(to_string(offset));
+        output.append("\n");
+        
         output.append("D=A\n");
 
-    } else if (segment == "this") {
+    } else if (segment == "this") {                 // DONE
+        output.append("@THIS\n");
+        output.append("D=M\n");
+        
+        output.append("@");
+        output.append(to_string(offset));
+        output.append("\n");
+        
+        output.append("A=D+A\n");
+        output.append("D=M\n");
 
-    } else if (segment == "that") {
+    } else if (segment == "that") {                 // DONE
+        output.append("@THAT\n");
+        output.append("D=M\n");
+        
+        output.append("@");
+        output.append(to_string(offset));
+        output.append("\n");
+        
+        output.append("A=D+A\n");
+        output.append("D=M\n");
 
-    } else if (segment == "pointer") {
+    } else if (segment == "temp") {                 // DONE
+        output.append("@R");
+        output.append(to_string(offset));
+        output.append("\n");
+        
+        output.append("D=M\n");
 
-    } else if (segment == "temp") {
-
-    } 
+    } else if (segment == "pointer") {              // Same functionality (?)
+        output.append("@R");
+        output.append(to_string(offset));
+        output.append("\n");
+        
+        output.append("D=M\n");
     
+    }
+
     output.append("@SP\n");                 // Iterates pointer upwards
     output.append("AM=M+1\n");
     output.append("A=A-1\n");               // Sets value at pointer
