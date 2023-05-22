@@ -297,7 +297,9 @@ string VMTranslator::vm_not(){
 
 /** Generate Hack Assembly code for a VM label operation */
 string VMTranslator::vm_label(string label){
-    return "(" + label + ")\n";
+    string output = "(" + label + ")";
+    
+    return output;
 }
 
 /** Generate Hack Assembly code for a VM goto operation */
@@ -305,7 +307,7 @@ string VMTranslator::vm_goto(string label){
     string output;
 
     output.append("@" + label + "\n");
-    output.append("0;JMP\n");
+    output.append("0;JMP");
     
     return output;
 }
@@ -319,7 +321,7 @@ string VMTranslator::vm_if(string label){
     output.append("D=M\n");             // Pops top element into D 
 
     output.append("@" + label + "\n");
-    output.append("D;JNE\n");           // Jumps if D != 0
+    output.append("D;JNE");           // Jumps if D != 0
     
     return output;
 }
