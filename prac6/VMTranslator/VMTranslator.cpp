@@ -22,84 +22,99 @@ VMTranslator::~VMTranslator() {
 string VMTranslator::vm_push(string segment, int offset){           // DONE 
     string output;
     
-    if (segment == "argument") {                    // DONE
+    if (segment == "argument") {                    // DONE; CHECKED
+        output.append("@");
+        output.append(to_string(offset));
+        output.append("\n");
+
+        output.append("D=A\n");
+
         output.append("@ARG\n");
-        output.append("D=M\n");
-
-        output.append("@");
-        output.append(to_string(offset));
-        output.append("\n");
-
-        output.append("A=D+A\n");
-        output.append("D=M\n");
-
-    } else if (segment == "local") {                // DONE
-        output.append("@LCL\n");
-        output.append("D=M\n");
-
-        output.append("@");
-        output.append(to_string(offset));
-        output.append("\n");
-
-        output.append("A=D+A\n");
-        output.append("D=M\n");
-
-    } else if (segment == "static") {               // DONE, but have to figure out how to translate variable NAME into an integer...
-        output.append("@");
-        output.append(to_string(offset));
-        output.append("\n");
+        output.append("A=M+D\n");
 
         output.append("D=M\n");
 
-    } else if (segment == "constant") {             // DONE
+    } else if (segment == "constant") {             // DONE; CHECKED
         output.append("@");
         output.append(to_string(offset));
         output.append("\n");
         
         output.append("D=A\n");
 
-    } else if (segment == "this") {                 // DONE
+    } else if (segment == "static") {               // DONE; CHECKED
+        output.append("@");
+        output.append((to_string(offset + 16)));
+        output.append("\n");
+
+        output.append("D=M\n");
+
+    } else if (segment == "local") {                // DONE; CHECKED
+        output.append("@");
+        output.append(to_string(offset));
+        output.append("\n");
+
+        output.append("D=A\n");
+        
+        output.append("@LCL\n");
+        output.append("A=M+D\n");
+
+        output.append("D=M\n");
+
+    } else if (segment == "this") {                 // DONE; CHECKED
+        output.append("@");
+        output.append(to_string(offset));
+        output.append("\n");
+
+        output.append("D=A\n");
+
         output.append("@THIS\n");
+        output.append("A=M+D\n");
+
         output.append("D=M\n");
-        
+
+    } else if (segment == "that") {                 // DONE; CHECKED
         output.append("@");
         output.append(to_string(offset));
         output.append("\n");
-        
-        output.append("A=D+A\n");
-        output.append("D=M\n");
 
-    } else if (segment == "that") {                 // DONE
+        output.append("D=A\n");
+
         output.append("@THAT\n");
+        output.append("A=M+D\n");
+
         output.append("D=M\n");
-        
+
+    } else if (segment == "temp") {                 // DONE; CHECKED
         output.append("@");
         output.append(to_string(offset));
         output.append("\n");
-        
-        output.append("A=D+A\n");
-        output.append("D=M\n");
 
-    } else if (segment == "temp") {                 // DONE
-        output.append("@R");
-        output.append(to_string(offset));
-        output.append("\n");
+        output.append("D=A\n");
+        
+        output.append("@5\n");        
+        output.append("A=A+D\n");
         
         output.append("D=M\n");
 
-    } else if (segment == "pointer") {              // Same functionality (?)
-        output.append("@R");
+    } else if (segment == "pointer") {              // DONE; CHECKED
+        output.append("@");
         output.append(to_string(offset));
         output.append("\n");
+
+        output.append("D=A\n");
+        
+        output.append("@3\n");        
+        output.append("A=A+D\n");
         
         output.append("D=M\n");
     
     }
 
     output.append("@SP\n");                 // Iterates pointer upwards
-    output.append("AM=M+1\n");
-    output.append("A=A-1\n");               // Sets value at pointer
-    output.append("M=D\n");
+    output.append("A=M\n");
+    output.append("M=D\n");               // Sets value at pointer
+    output.append("@SP\n");
+    output.append("M=M+1\n");
     
     return output;
 }
