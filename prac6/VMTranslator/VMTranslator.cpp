@@ -123,104 +123,162 @@ string VMTranslator::vm_push(string segment, int offset){           // DONE
 string VMTranslator::vm_pop(string segment, int offset){    
     string output;
     
-    if (segment == "argument") {                    // DONE
-        output.append("@ARG\n");
-        output.append("D=M\n");
-        
-        output.append("@R");
-        output.append(to_string(offset));
-        output.append("\n");
-        
-        output.append("D=D+A\n");
-
-        output.append("@SP\n");
-        output.append("AM=M-1\n");
-        output.append("D=D+M\n");
-        output.append("A=D-M\n");
-        output.append("M=D-A\n");
-        
-    } else if (segment == "local") {                // DONE
-        output.append("@LCL\n");
-        output.append("D=M\n");
-        
-        output.append("@R");
-        output.append(to_string(offset));
-        output.append("\n");
-        
-        output.append("D=D+A\n");
-
-        output.append("@SP\n");
-        output.append("AM=M-1\n");
-        output.append("D=D+M\n");
-        output.append("A=D-M\n");
-        output.append("M=D-A\n");
-        
-    } else if (segment == "static" ) {              // DONE
+    if (segment == "static") {
         output.append("@SP\n");
         output.append("AM=M-1\n");
         output.append("D=M\n");
 
         output.append("@");
-        output.append(to_string(offset));
+        output.append(to_string(offset + 16));
         output.append("\n");
 
         output.append("M=D\n");
    
-    } else if (segment == "pointer") {              // DONE
-        output.append("@SP\n");
-        output.append("AM=M-1\n");
-        output.append("D=M\n");
-
+    } else {
         output.append("@");
         output.append(to_string(offset));
         output.append("\n");
 
+        output.append("D=A\n");
+
+        if (segment == "argument") {
+            output.append("@ARG\n");
+            output.append("D=M+D\n");
+
+        } else if (segment == "local") {
+            output.append("@LCL\n");
+            output.append("D=M+D\n");
+
+        } else if (segment == "this") {
+            output.append("@THIS\n");
+            output.append("D=M+D\n");
+
+        } else if (segment == "that") {
+            output.append("@THAT\n");
+            output.append("D=M+D\n");
+
+        } else if (segment == "pointer") {
+            output.append("@3\n");
+            output.append("D=A+D\n");
+            
+        } else if (segment == "temp") {
+            output.append("@5\n");
+            output.append("D=A+D\n");
+
+        }
+
+        output.append("@R13\n");
         output.append("M=D\n");
-   
-    } else if (segment == "temp") {             // DONE (same functionality as pointer I think)
+
         output.append("@SP\n");
         output.append("AM=M-1\n");
         output.append("D=M\n");
-
-        output.append("@R");
-        output.append(to_string(offset));
-        output.append("\n");
-
-        output.append("M=D\n");
         
-    } else if (segment == "this") {             // DONE
-        output.append("@THIS\n");
-        output.append("D=M\n");
+        output.append("@R13\n");            
+        output.append("A=M\n");
+        output.append("M=D\n");
 
-        output.append("@");
-        output.append(to_string(offset));
-        output.append("\n");
-
-        output.append("D=D+A\n");
-
-        output.append("@SP\n");
-        output.append("AM=M-1\n");
-        output.append("D=D+M\n");
-        output.append("A=D-M\n");
-        output.append("M=D-A\n");
-
-    } else if (segment == "that") {             // DONE
-        output.append("@THAT\n");
-        output.append("D=M\n");
-
-        output.append("@");
-        output.append(to_string(offset));
-        output.append("\n");
-
-        output.append("D=D+A\n");
-
-        output.append("@SP\n");
-        output.append("AM=M-1\n");
-        output.append("D=D+M\n");
-        output.append("A=D-M\n");
-        output.append("M=D-A\n");
 
     }
+
+    // if (segment == "argument") {                    // DONE
+    //     output.append("@ARG\n");
+    //     output.append("D=M\n");
+        
+    //     output.append("@R");
+    //     output.append(to_string(offset));
+    //     output.append("\n");
+        
+    //     output.append("D=D+A\n");
+
+    //     output.append("@SP\n");
+    //     output.append("AM=M-1\n");
+    //     output.append("D=D+M\n");
+    //     output.append("A=D-M\n");
+    //     output.append("M=D-A\n");
+        
+    // } else if (segment == "local") {                // DONE
+    //     output.append("@LCL\n");
+    //     output.append("D=M\n");
+        
+    //     output.append("@R");
+    //     output.append(to_string(offset));
+    //     output.append("\n");
+        
+    //     output.append("D=D+A\n");
+
+    //     output.append("@SP\n");
+    //     output.append("AM=M-1\n");
+    //     output.append("D=D+M\n");
+    //     output.append("A=D-M\n");
+    //     output.append("M=D-A\n");
+        
+    // } else if (segment == "static" ) {              // DONE; CHECKED
+    //     output.append("@SP\n");
+    //     output.append("AM=M-1\n");
+    //     output.append("D=M\n");
+
+    //     output.append("@");
+    //     output.append(to_string(offset + 16));
+    //     output.append("\n");
+
+    //     output.append("M=D\n");
+   
+    // } else if (segment == "pointer") {              // DONE
+    //     output.append("@SP\n");
+    //     output.append("AM=M-1\n");
+    //     output.append("D=M\n");
+
+    //     output.append("@");
+    //     output.append(to_string(offset));
+    //     output.append("\n");
+
+    //     output.append("M=D\n");
+   
+    // } else if (segment == "temp") {             // DONE (same functionality as pointer I think)
+    //     output.append("@SP\n");
+    //     output.append("AM=M-1\n");
+    //     output.append("D=M\n");
+
+    //     output.append("@R");
+    //     output.append(to_string(offset));
+    //     output.append("\n");
+
+    //     output.append("M=D\n");
+        
+    // } else if (segment == "this") {             // DONE
+    //     output.append("@THIS\n");
+    //     output.append("D=M\n");
+
+    //     output.append("@");
+    //     output.append(to_string(offset));
+    //     output.append("\n");
+
+    //     output.append("D=D+A\n");
+
+    //     output.append("@SP\n");
+    //     output.append("AM=M-1\n");
+    //     output.append("D=D+M\n");
+    //     output.append("A=D-M\n");
+    //     output.append("M=D-A\n");
+
+    // } else if (segment == "that") {             // DONE
+    //     output.append("@THAT\n");
+    //     output.append("D=M\n");
+
+    //     output.append("@");
+    //     output.append(to_string(offset));
+    //     output.append("\n");
+
+    //     output.append("D=D+A\n");
+
+    //     output.append("@SP\n");
+    //     output.append("AM=M-1\n");
+    //     output.append("D=D+M\n");
+    //     output.append("A=D-M\n");
+    //     output.append("M=D-A\n");
+
+    // }
     return output;
 }
 
