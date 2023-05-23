@@ -16,6 +16,7 @@ set argument 400,  // base address of the argument segment
 set this 3000,     // base address of the this segment
 set that 3010,     // base address of the that segment
 
+// Negative second value
 
 set RAM[16] 2,   // static 0
 set RAM[17] -30,  // static 1

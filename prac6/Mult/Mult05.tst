@@ -16,6 +16,7 @@ set argument 400,  // base address of the argument segment
 set this 3000,     // base address of the this segment
 set that 3010,     // base address of the that segment
 
+// Summary test of -ve's and mixed 3 and 5 to ensure correct functionality
 
 set RAM[16] 3,   // static 0
 set RAM[17] -5,  // static 1

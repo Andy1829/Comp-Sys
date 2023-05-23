@@ -54,7 +54,7 @@ output;
 
 load Abs.vm;
 
-set RAM[16] -1000,  // static 0
+set RAM[16] 1000,  // static 0
 set RAM[17] -2,  // static 1
 set RAM[18] -3,  // static 2
 
