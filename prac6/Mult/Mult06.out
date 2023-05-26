@@ -1,0 +1,2 @@
+|   sp   | local  | argument |  this  |that[4] |RAM[16] |RAM[17] | local[0] |
+|    256 |    300 |      400 |   3000 |      0 |      5 |     -3 |       15 |

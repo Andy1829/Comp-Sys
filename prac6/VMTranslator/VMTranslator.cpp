@@ -410,15 +410,105 @@ string VMTranslator::vm_if(string label){
 
 /** Generate Hack Assembly code for a VM function operation */
 string VMTranslator::vm_function(string function_name, int n_vars){
-    return "";
+    string output;
+
+    output.append("(" + function_name + ")");
+    for (int n = 0; n < n_vars; n++){
+        output.append("\n@0");
+        output.append("\nD=A");
+        output.append("\n@SP");
+        output.append("\nAm=M+1");
+        output.append("\nA=A-1");
+        output.append("\nM=D");
+    }
+
+    return output;
 }
 
 /** Generate Hack Assembly code for a VM call operation */
 string VMTranslator::vm_call(string function_name, int n_args){
-    return "";
+    string output;
+
+    // Return address
+    output.append("@endFunc\nD=A\n@SP\nAM=M+1\nA=A-1\nM=D\n");
+    
+    // Local
+    output.append("@LCL\nD=M\n@SP\nAM=M+1\nA=A-1\nM=D\n");
+    
+    // Argument
+    output.append("@ARG\nD=M\n@SP\nAM=M+1\nA=A-1\nM=D\n");
+
+    // This
+    output.append("@THIS\nD=M\n@SP\nAM=M+1\nA=A-1\nM=D\n");
+
+    // That
+    output.append("@THAT\nD=M\n@SP\nAM=M+1\nA=A-1\nM=D\n");
+
+
+    // Argument
+    output.append("@SP\nD=M\n@" + to_string(n_args + 5) + 
+    "\nD=D-A\n@ARG\nM=D\n");
+
+    // Argument
+    output.append("@SP\nD=M\n@LCL\nM=D\n");
+    output.append("@" + function_name + "\n0;JMP\n");
+
+    // Closing label
+    output.append("(endFunc)");
+
+    return output;
 }
 
 /** Generate Hack Assembly code for a VM return operation */
 string VMTranslator::vm_return(){
-    return "";
+    string output;
+
+    output.append("@LCL\n");
+    output.append("D=M\n");
+    output.append("@5\n");
+    output.append("A=D-A\n");
+    output.append("D=M\n");
+
+    output.append("@R13\n");
+    output.append("M=D\n");
+    output.append("@SP\n");
+    output.append("A=M-1\n");
+    output.append("D=M\n");
+    
+    output.append("@ARG\n");
+    output.append("A=M\n");
+    output.append("M=D\n");
+    output.append("D=A+1\n");
+    output.append("@SP\n");
+    output.append("M=D\n");
+    
+    output.append("@LCL\n");
+    output.append("AM=M-1\n");
+    output.append("D=M\n");
+    output.append("@THAT\n");
+    output.append("M=D\n");
+
+    output.append("@LCL\n");
+    output.append("AM=M-1\n");
+    output.append("D=M\n");
+    output.append("@THIS\n");
+    output.append("M=D\n");
+
+    output.append("@LCL\n");
+    output.append("AM=M-1\n");
+    output.append("D=M\n");
+    output.append("@ARG\n");
+    output.append("M=D\n");
+
+    output.append("@LCL\n");
+    output.append("A=M-1\n");
+    output.append("D=M\n");
+    output.append("@LCL\n");
+    output.append("M=D\n");
+
+    output.append("@R13\n");
+    output.append("A=M\n");
+    output.append("0;JMP");
+    
+    return output;
 }
