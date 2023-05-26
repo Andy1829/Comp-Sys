@@ -1,0 +1,3 @@
+// Adds 2 numbers.
+pop constant 1
+pop constant 5

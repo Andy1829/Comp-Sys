@@ -284,7 +284,6 @@ string VMTranslator::vm_pop(string segment, int offset){
 
 
 
-
 /** Generate Hack Assembly code for a VM add operation */
 string VMTranslator::vm_add(){
     return "";
@@ -305,7 +304,6 @@ string VMTranslator::vm_neg(){                          // DONE
     
     return output;
 }
-
 
 
 
@@ -366,8 +364,6 @@ string VMTranslator::vm_not(){
 }
 
 
-
-
 /** Generate Hack Assembly code for a VM label operation */
 string VMTranslator::vm_label(string label){
     // string output = "(" + label + ")";
@@ -405,9 +401,6 @@ string VMTranslator::vm_if(string label){
     return "@SP\nAM=M-1\nD=M\n@" + label + "\nD;JNE";
 }
 
-
-
-
 /** Generate Hack Assembly code for a VM function operation */
 string VMTranslator::vm_function(string function_name, int n_vars){
     string output;
@@ -417,7 +410,7 @@ string VMTranslator::vm_function(string function_name, int n_vars){
         output.append("\n@0");
         output.append("\nD=A");
         output.append("\n@SP");
-        output.append("\nAm=M+1");
+        output.append("\nAM=M+1");
         output.append("\nA=A-1");
         output.append("\nM=D");
     }
@@ -445,11 +438,9 @@ string VMTranslator::vm_call(string function_name, int n_args){
     output.append("@THAT\nD=M\n@SP\nAM=M+1\nA=A-1\nM=D\n");
 
 
-    // Argument
     output.append("@SP\nD=M\n@" + to_string(n_args + 5) + 
     "\nD=D-A\n@ARG\nM=D\n");
 
-    // Argument
     output.append("@SP\nD=M\n@LCL\nM=D\n");
     output.append("@" + function_name + "\n0;JMP\n");
 
